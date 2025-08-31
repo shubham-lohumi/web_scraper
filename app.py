@@ -7,7 +7,7 @@ app=Flask(__name__)
 @app.route('/')
 def home():
 
-    url="https://quotes.toscrape.com"
+    url="https://www.geeksforgeeks.org/machine-learning/ml-linear-regression/"
     response=requests.get(url)
 
     if response.status_code==200:
@@ -18,9 +18,13 @@ def home():
 
     soup=BeautifulSoup(response.text,'html.parser')
 
-    quotes=soup.find_all("span",class_="text")
+    para=soup.find_all("div",class_="content")
+    if para:
+        article=[p.text for p in para.find_all("p")]
+    else:
+        article=[]
 
-    return render_template("index.html",data=quotes)
+    return render_template("index.html",data=article)
 
 if __name__=="__main__":
     app.run(debug=True)
